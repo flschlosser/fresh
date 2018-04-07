@@ -8,4 +8,4 @@ retentionTime: 1
 path: .
 
 # the command to run when changes have been detected
-command: open -a Safari http://www.google.com
+command: open -g -a Safari -e http://localhost:8080

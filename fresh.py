@@ -1,16 +1,18 @@
-import os
 import time
-import subprocess
+
 import yaml
+from watchdog.observers import Observer
+
+import event_handler
 
 
 def main():
     freshfile = read_freshfile()
 
-    if freshfile['runOnStart']:
-        run_command(freshfile['command'])
+    # if freshfile['runOnStart']:
+    #     run_command(freshfile['command'])
 
-    observe_path(freshfile['path'], freshfile['command'], freshfile['retentionTime'])
+    observe(freshfile['path'], freshfile['command'])
 
 
 def read_freshfile():
@@ -22,26 +24,16 @@ def read_freshfile():
             return None
 
 
-def observe_path(path, action, retention_time=1):
-    before = dict([(f, None) for f in os.listdir(path)])
-    while 1:
-        try:
-            time.sleep(retention_time)
-        except KeyboardInterrupt:
-            return
-        after = dict([(f, None) for f in os.listdir(path)])
-        added = [f for f in after if not f in before]
-        removed = [f for f in before if not f in after]
-        if added or removed:
-            print("Info: change detected")
-            run_command(action)
-        before = after
-
-
-def run_command(command):
-    result = subprocess.run(command, shell=True, check=True)
-    if result.returncode != 0:
-        print("Finished command with error:", result)
+def observe(path, command):
+    observer = Observer()
+    observer.schedule(event_handler.ChangeEventHandler(command), path, recursive=True)
+    observer.start()
+    try:
+        while True:
+            time.sleep(1)
+    except KeyboardInterrupt:
+        observer.stop()
+    observer.join()
 
 
 if __name__ == "__main__":

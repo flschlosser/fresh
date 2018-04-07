@@ -25,7 +25,10 @@ def read_freshfile():
 def observe_path(path, action, retention_time=1):
     before = dict([(f, None) for f in os.listdir(path)])
     while 1:
-        time.sleep(retention_time)
+        try:
+            time.sleep(retention_time)
+        except KeyboardInterrupt:
+            return
         after = dict([(f, None) for f in os.listdir(path)])
         added = [f for f in after if not f in before]
         removed = [f for f in before if not f in after]

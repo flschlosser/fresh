@@ -4,15 +4,18 @@ import yaml
 from watchdog.observers import Observer
 
 import event_handler
+import executors
 
 
 def main():
     freshfile = read_freshfile()
 
-    # if freshfile['runOnStart']:
-    #     run_command(freshfile['command'])
+    executor = executors.Executor(freshfile['commands'])
 
-    observe(freshfile['path'], freshfile['command'])
+    if freshfile['runOnStart']:
+        executor.execute()
+
+    observe(freshfile['path'], executor)
 
 
 def read_freshfile():
@@ -24,9 +27,9 @@ def read_freshfile():
             return None
 
 
-def observe(path, command):
+def observe(path, executor):
     observer = Observer()
-    observer.schedule(event_handler.ChangeEventHandler(command), path, recursive=True)
+    observer.schedule(event_handler.ChangeEventHandler(executor), path, recursive=True)
     observer.start()
     try:
         while True:

@@ -8,17 +8,16 @@ Freshfile
 ---------
 
 ````yaml
-# run the command on start up of Fresh
+# run the commands on start up of Fresh
 runOnStart: true
 
-# the duration to check for changes in the path
-retentionTime: 0.5
-
-# the path to check for changes
+# the root path to check for changes
 path: .
 
-# the command to run when changes have been detected
-command: open -a Safari http://127.0.0.1:8080/helloworld
+# the commands to run when changes have been detected
+commands:
+  - open -g -a Safari -e http://localhost:8080
+  - touch ~/testfile.txt
 ````
 
 Usage

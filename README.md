@@ -8,17 +8,31 @@ Freshfile
 ---------
 
 ````yaml
-# run the commands on start up of Fresh
+#
+# run the command on start up of Fresh
+#
 runOnStart: true
 
-# the root path to check for changes
+#
+# the path to check for changes
+#
 path: .
 
+#
 # the commands to run when changes have been detected
+#
 commands:
   - open -g -a Safari -e http://localhost:8080
   - touch ~/testfile.txt
+
+#
+# specify the files or folder you want to ignore
+#
+ignore:
+  - .git
+  - .idea
 ````
+
 
 Usage
 -----
@@ -33,6 +47,10 @@ Usage
 `python3 fresh.py`
 
 
+Planned features
+----------------
+- Give commands access to file of event (e.g. echo "${file}")
+- Improve trigger event options to minimize command runs (e.g. only run once a minute) 
 
 
 License & Authors
@@ -61,5 +79,4 @@ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
 LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
-
 ```

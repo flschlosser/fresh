@@ -15,7 +15,7 @@ def main():
     if freshfile['runOnStart']:
         executor.execute()
 
-    observe(freshfile['path'], executor)
+    observe(freshfile['path'], executor, freshfile['ignore'])
 
 
 def read_freshfile():
@@ -27,9 +27,9 @@ def read_freshfile():
             return None
 
 
-def observe(path, executor):
+def observe(path, executor, ignores):
     observer = Observer()
-    observer.schedule(event_handler.ChangeEventHandler(executor), path, recursive=True)
+    observer.schedule(event_handler.ChangeEventHandler(executor, ignores), path, recursive=False)
     observer.start()
     try:
         while True:

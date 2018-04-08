@@ -1,10 +1,23 @@
+#
 # run the command on start up of Fresh
+#
 runOnStart: true
 
+#
 # the path to check for changes
+#
 path: .
 
+#
 # the command to run when changes have been detected
+#
 commands:
   - open -g -a Safari -e http://localhost:8080
   - touch ~/testfile.txt
+
+#
+# specify the files or folder you want to ignore
+#
+ignore:
+  - .git
+  - .idea
